@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [react(), viteEslint({ failOnError: false })],
   resolve: {
     alias: {
-      '@': '/src'
+      '@': '/src',
+      '~': '/types'
     }
   }
 });
