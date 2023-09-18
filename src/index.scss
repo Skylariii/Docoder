@@ -1,10 +1,62 @@
 * {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
   font-family: 'Playfair Display', serif;
 }
-
+#root {
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  -webkit-appearance: none;
+  appearance: none;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+canvas {
+  margin: 0;
+  padding: 0;
+}
+body {
+  margin: 0;
+  left: 0;
+  top: 0;
+  position: fixed;
+}
+img,
+a {
+  -webkit-touch-callout: none;
+}
+html {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
 :root {
   font-size: 16px;
 }
+// @media screen and (orientation: portrait) {
+//       html{
+//          width : 100% ;
+//          height : 100% ;
+//           background-color: white ;
+//           overflow : hidden;
+//       }
+//       canvas{
+//          transform-origin: 0 0;
+//           overflow : hidden;
+//           transform: rotateZ(90deg) translateY(-100%);
+//       }
+// }
+// @media screen and (orientation: landscape) {
+//        html{
+//          width : 100% ;
+//          height : 100% ;
+//          background-color: white ;
+//       }
+//        body{
+//           width : 100% ;
+//          height : 100% ;
+//          background-color: white ;
+//       }
+// }
