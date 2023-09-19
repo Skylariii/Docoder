@@ -8,6 +8,9 @@ dependencies:
   '@pixi/react':
     specifier: ^7.1.1
     version: 7.1.1(@babel/runtime@7.22.15)(@pixi/app@7.2.4)(@pixi/constants@7.2.4)(@pixi/core@7.2.4)(@pixi/display@7.2.4)(@pixi/extensions@7.2.4)(@pixi/graphics@7.2.4)(@pixi/math@7.2.4)(@pixi/mesh-extras@7.2.4)(@pixi/mesh@7.2.4)(@pixi/particle-container@7.2.4)(@pixi/sprite-animated@7.2.4)(@pixi/sprite-tiling@7.2.4)(@pixi/sprite@7.2.4)(@pixi/text-bitmap@7.2.4)(@pixi/text@7.2.4)(@pixi/ticker@7.2.4)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+  '@unocss/reset':
+    specifier: ^0.55.7
+    version: 0.55.7
   pixi.js:
     specifier: ^7.2.4
     version: 7.2.4(@pixi/utils@7.2.4)
@@ -40,6 +43,9 @@ devDependencies:
   '@typescript-eslint/parser':
     specifier: ^6.0.0
     version: 6.0.0(eslint@8.45.0)(typescript@5.0.2)
+  '@unocss/preset-attributify':
+    specifier: ^0.55.7
+    version: 0.55.7
   '@vitejs/plugin-react':
     specifier: ^4.0.3
     version: 4.0.3(vite@4.4.5)
@@ -1637,7 +1643,6 @@ packages:
 
   /@unocss/reset@0.55.7:
     resolution: {integrity: sha512-yvmLhxqUNgf6wue7IvhV/FdrQW9H9LF1Bmmhwwaiz2aV0E74aN4pbuYPZwNq3YafsQvNQ0UdtuXjddY4QMRCPw==}
-    dev: true
 
   /@unocss/scope@0.55.7:
     resolution: {integrity: sha512-r0CaS1aSpcC37ztqOJ3qaWIzM6zwdlX8r0rib2vTvWTckw1J0ocVhjNkWRBM9kRWte006JhecdiZzXNHA40akg==}
