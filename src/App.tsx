@@ -3,6 +3,7 @@ import './App.scss';
 import { LegacyRef, useEffect, useRef } from 'react';
 import { detectOrient, remToPx, getDPR } from './utils';
 import { Application } from 'pixi.js';
+import EnemySprites from './components/EnemySprites';
 function App() {
   const stageRef = useRef<unknown>();
   // console.log(stageRef.current.app);
@@ -19,6 +20,7 @@ function App() {
       }
     }
   }, [stageRef]);
+
   return (
     <Stage
       ref={stageRef as LegacyRef<Stage>}
@@ -27,7 +29,8 @@ function App() {
       height={window.innerHeight}
       options={{ backgroundColor: 0xeef1f5 }}
     >
-      <Text text="main" x={remToPx(10) * getDPR()} y={remToPx(10) * getDPR()} anchor={{ x: 0.5, y: 0.5 }} />
+      <EnemySprites type={'bug'} />
+      <EnemySprites type={'maliciousScrips'} />
     </Stage>
   );
 }
