@@ -1,6 +1,6 @@
 import { Application, ICanvas } from 'pixi.js';
 
-export function detectOrient(app: Application<ICanvas>) {
+export default function detectOrient(app: Application<ICanvas>) {
   console.log(app);
 
   let width = document.documentElement.clientWidth,

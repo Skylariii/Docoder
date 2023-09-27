@@ -1,4 +1,4 @@
-export function hitTestRectangle(r1: any, r2: any) {
+export default function hitTestRectangle(r1: any, r2: any) {
   //Define the variables we'll need to calculate
   let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
   //hit will determine whether there's a collision
