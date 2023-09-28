@@ -1,9 +1,9 @@
-import { Stage, Text } from '@pixi/react';
+import { Stage } from '@pixi/react';
 import './App.scss';
 import { LegacyRef, useEffect, useRef } from 'react';
-import { detectOrient, remToPx, getDPR } from './utils';
+import { detectOrient } from './utils';
 import { Application } from 'pixi.js';
-import EnemySprites from './components/EnemySprites';
+import MonsterSpawner from './components/MonsterSpawner';
 function App() {
   const stageRef = useRef<unknown>();
   // console.log(stageRef.current.app);
@@ -29,8 +29,7 @@ function App() {
       height={window.innerHeight}
       options={{ backgroundColor: 0xeef1f5 }}
     >
-      <EnemySprites type={'bug'} />
-      <EnemySprites type={'maliciousScrips'} />
+      <MonsterSpawner></MonsterSpawner>
     </Stage>
   );
 }
