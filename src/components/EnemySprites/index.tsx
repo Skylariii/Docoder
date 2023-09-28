@@ -33,7 +33,7 @@ export default function EnemySprites(props: any) {
   useTick((delta) => {
     if (delta) {
       setRotation(rotation + 0.1 * delta);
-      if (type === 'bug') {
+      if (type === 'bug' && x >= 15) {
         setX(x - 1);
       } else {
         if (up_down === 'down' && y >= 140 && x > 250) {
