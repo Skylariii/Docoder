@@ -1,8 +1,7 @@
-import { LegacyRef, useCallback, useEffect, useRef, useState } from 'react';
-import * as PIXI from 'pixi.js';
-import { AnimatedSprite, Container, Graphics, Sprite, Stage, Text, useTick } from '@pixi/react';
+import { useCallback, useEffect, useRef, useState, forwardRef } from 'react';
+import { Sprite, useTick } from '@pixi/react';
 
-export default function EnemySprites(props: any) {
+const EnemySprites = forwardRef(function EnemySprites(props: any, ref: any) {
   const { type } = props;
   const [blood, setBlood] = useState(0); //血量
   const [attack, setAttack] = useState(0); //攻击力
@@ -30,6 +29,7 @@ export default function EnemySprites(props: any) {
   // 后续改变血量
   useEffect(() => {}, [blood]);
 
+  // 自移动，60帧
   useTick((delta) => {
     if (delta) {
       setRotation(rotation + 0.1 * delta);
@@ -39,7 +39,6 @@ export default function EnemySprites(props: any) {
         if (up_down === 'down' && y >= 140 && x > 250) {
           //左移且上下移动
           setY(y - 1);
-          setX(x - 1);
         } else if (up_down === 'down' && y >= 140) {
           //仅上下移动
           setY(y - 1);
@@ -48,7 +47,6 @@ export default function EnemySprites(props: any) {
         }
         if (up_down === 'up' && y <= 160 && x > 250) {
           setY(y + 1);
-          setX(x - 1);
         } else if (up_down === 'up' && y <= 160) {
           setY(y + 1);
         } else if (up_down === 'up') {
@@ -61,10 +59,12 @@ export default function EnemySprites(props: any) {
   return (
     <>
       {type === 'bug' ? (
-        <Sprite interactive={true} image={url} x={x} y={y} anchor={{ x: 0.5, y: 0.5 }} rotation={rotation} />
+        <Sprite interactive={true} image={url} x={x} y={y} anchor={{ x: 0.5, y: 0.5 }} rotation={rotation} ref={ref} />
       ) : (
-        <Sprite interactive={true} image={url} x={x} y={y} anchor={{ x: 0.5, y: 0.5 }} />
+        <Sprite interactive={true} image={url} x={x} y={y} anchor={{ x: 0.5, y: 0.5 }} ref={ref} />
       )}
     </>
   );
-}
+});
+
+export default EnemySprites;

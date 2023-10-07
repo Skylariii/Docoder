@@ -71,6 +71,7 @@ const App = () => {
       <PlayerSprites ref={LanMei}></PlayerSprites>
       <Container ref={containerRef}>{monsters}</Container>
       <Circle x={820} y={400} size={60} handleClick={attack} />
+      <EnemySprites type="maliciousScrips" />
     </>
   );
 };
