@@ -6,18 +6,36 @@ import PlayerSprites from '../PlayerSprites';
 import Circle from '../Circle';
 
 const App = () => {
-  const [monsters, setMonsters] = useState<JSX.Element[]>([]);
+  const [monsters_Bug, setMonsters_Bug] = useState<JSX.Element[]>([]);
   const containerRef = useRef<any>(null);
+  const childrens = [
+    useRef<any>(null),
+    useRef<any>(null),
+    useRef<any>(null),
+    useRef<any>(null),
+    useRef<any>(null),
+    useRef<any>(null)
+  ];
   const monsterCountRef = useRef(0);
   const LanMei = useRef<any>(null);
+  const MaliciousScrips = useRef<any>(null); //恶意代码
 
   const updateMonsters = () => {
     // 生成新的怪物，使用独立的计数器作为唯一的key
-    const newMonster = <EnemySprites type={'bug'} key={monsterCountRef.current}></EnemySprites>;
-    setMonsters((prevMonsters) => [...prevMonsters, newMonster]);
+    const newMonster = (
+      <EnemySprites
+        type={'bug'}
+        key={monsterCountRef.current}
+        X={600}
+        Y={270}
+        ref={childrens[monsterCountRef.current % 7]}
+      ></EnemySprites>
+    );
+    setMonsters_Bug((prevMonsters) => [...prevMonsters, newMonster]);
 
     // 增加计数器
     monsterCountRef.current++;
+
     if (monsterCountRef.current > 10000) {
       monsterCountRef.current = 0;
     }
@@ -35,18 +53,24 @@ const App = () => {
   const HitMonitor = () => {
     if (containerRef.current && containerRef.current.children.length > 0) {
       const x = containerRef.current.children[0].x;
+      const y = containerRef.current.children[0].y;
       if (x < 200) {
+        childrens[monsterCountRef.current % 6].current.changeBlood(1);
         // 如果被蓝妹躲过，移除第一个精灵
-        setMonsters((prevMonsters) => prevMonsters.slice(1));
+
+        if (y > 400) {
+          // setMonsters_Bug((prevMonsters) => prevMonsters.slice(1));
+          MaliciousScrips.current.changeBlood(1); //每移除一个精灵，恶意代码血量减一
+        }
       }
     }
     // 执行碰撞检测并过滤掉碰撞的怪物
     if (LanMei.current && containerRef.current) {
-      const newMonster = monsters.filter((_, index) => {
+      const newMonster = monsters_Bug.filter((_, index) => {
         return !hitTestRectangle(LanMei.current.ref.current, containerRef.current.children[index]).value;
       });
-      if (newMonster.length !== monsters.length) {
-        setMonsters(() => newMonster);
+      if (newMonster.length !== monsters_Bug.length) {
+        setMonsters_Bug(() => newMonster);
       }
     }
   };
@@ -69,9 +93,9 @@ const App = () => {
     <>
       <Circle x={120} y={400} size={60} handleClick={jump} />
       <PlayerSprites ref={LanMei}></PlayerSprites>
-      <Container ref={containerRef}>{monsters}</Container>
+      <Container ref={containerRef}>{monsters_Bug}</Container>
       <Circle x={820} y={400} size={60} handleClick={attack} />
-      <EnemySprites type="maliciousScrips" />
+      <EnemySprites type="maliciousScrips" X={600} Y={270} ref={MaliciousScrips} />
     </>
   );
 };
