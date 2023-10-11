@@ -1,9 +1,10 @@
 import { Container } from '@pixi/react';
 import { useEffect, useState, useRef } from 'react';
-import EnemySprites from '../EnemySprites';
 import { hitTestRectangle } from '../../utils';
 import PlayerSprites from '../PlayerSprites';
 import Circle from '../Circle';
+import BugScrips from '../EnemySprites/BugScrips';
+import MaliciousScrips from '../EnemySprites/MaliciousScrips';
 
 const App = () => {
   const [monsters_Bug, setMonsters_Bug] = useState<JSX.Element[]>([]);
@@ -12,22 +13,22 @@ const App = () => {
   const bugRefs = useRef<any>(new Array()); //每个bug的实例
   const monsterCountRef = useRef(0);
   const LanMei = useRef<any>(null);
-  const MaliciousScrips = useRef<any>(null); //恶意代码
+  const MaliciousScripsRef = useRef<any>(null); //恶意代码
 
   const updateMonsters = () => {
     // 生成新的怪物，使用独立的计数器作为唯一的key
     const newMonster = (
-      <EnemySprites
-        type={'bug'}
+      <BugScrips
         key={monsterCountRef.current}
         X={600}
         Y={270}
-        ref={(bugRef) => {
-          if (bugRef) bugRefs.current[monsterCountRef.current] = bugRef; //动态拿到对应bug的实例
+        ref={(bugRef: any) => {
+          if (bugRef) {
+            bugRefs.current[monsterCountRef.current] = bugRef; //动态拿到对应bug的实例
+          }
         }}
-      ></EnemySprites>
+      />
     );
-    // bugRefs.current.push(bugRef);
     setMonsters_Bug((prevMonsters) => [...prevMonsters, newMonster]);
 
     // 增加计数器
@@ -54,7 +55,8 @@ const App = () => {
       if (x < 200) {
         bugRef.current++;
         bugRefs.current[bugRef.current].changeBlood(1); //怪物扣一点血
-        MaliciousScrips.current.changeBlood(1); //每移除一个精灵，恶意代码血量减一
+
+        MaliciousScripsRef.current.changeBlood(1); //每移除一个精灵，恶意代码血量减一
 
         // 如果被蓝妹躲过，移除第一个精灵
         // setMonsters_Bug((prevMonsters) => prevMonsters.slice(1));
@@ -91,7 +93,7 @@ const App = () => {
       <PlayerSprites ref={LanMei}></PlayerSprites>
       <Container ref={containerRef}>{monsters_Bug}</Container>
       <Circle x={750} y={320} size={60} handleClick={attack} />
-      <EnemySprites type="maliciousScrips" X={600} Y={270} ref={MaliciousScrips} />
+      <MaliciousScrips X={600} Y={150} ref={MaliciousScripsRef} />
     </>
   );
 };
