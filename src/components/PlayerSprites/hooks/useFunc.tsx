@@ -28,6 +28,8 @@ export default function useJump(props: Props) {
   //无敌冲刺
   function invincibleSprint() {
     setStatus(Status.SPRINTING);
+
+    setStatus(Status.SPRINTING);
   }
 
   return {};

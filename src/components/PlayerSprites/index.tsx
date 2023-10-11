@@ -42,7 +42,6 @@ const PlayerSprites = forwardRef((_props, ref) => {
   useEffect(() => {
     getRunningImgs();
   }, []);
-
   //监听人物状态
   useEffect(() => {
     switch (status) {
