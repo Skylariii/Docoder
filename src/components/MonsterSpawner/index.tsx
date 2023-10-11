@@ -13,15 +13,16 @@ const App = () => {
   const bugRefs = useRef<any>(new Array()); //每个bug的实例
   const monsterCountRef = useRef(0);
   const LanMei = useRef<any>(null);
-  const MaliciousScripsRef = useRef<any>(null); //恶意代码
+  const MaliciousScripsRef = useRef<any>(null); //恶意代码Ref
+  const [MaliciousScrip, setMaliciousScrip] = useState<JSX.Element>(); //恶意代码
 
   const updateMonsters = () => {
     // 生成新的怪物，使用独立的计数器作为唯一的key
     const newMonster = (
       <BugScrips
         key={monsterCountRef.current}
-        X={600}
-        Y={270}
+        X={window.innerWidth + 20}
+        Y={200}
         ref={(bugRef: any) => {
           if (bugRef) {
             bugRefs.current[monsterCountRef.current] = bugRef; //动态拿到对应bug的实例
@@ -36,11 +37,16 @@ const App = () => {
     if (monsterCountRef.current > 1000) {
       monsterCountRef.current = 0;
     }
+
+    // 概率生成恶意代码
+    if (Math.random() > 0.7 && !MaliciousScrip) {
+      setMaliciousScrip(<MaliciousScrips X={600} Y={150} ref={MaliciousScripsRef} />);
+    }
   };
 
   useEffect(() => {
     // 创建一个定时器来定期刷新怪物
-    const spawnMonsterInterval = setInterval(updateMonsters, 1000);
+    const spawnMonsterInterval = setInterval(updateMonsters, 1500);
 
     return () => {
       // 在组件卸载时清除定时器
@@ -71,6 +77,15 @@ const App = () => {
         setMonsters_Bug(() => newMonster);
       }
     }
+    console.log(MaliciousScrip, MaliciousScripsRef.current.blood, MaliciousScripsRef.current.x);
+    // 检测MaliciousScrips是否死亡
+    if (
+      MaliciousScrip != undefined &&
+      MaliciousScripsRef.current.blood <= 0 &&
+      MaliciousScripsRef.current.x >= window.innerWidth + 10
+    ) {
+      setMaliciousScrip(<></>);
+    }
   };
   useEffect(() => {
     const Interval = setInterval(() => {
@@ -93,7 +108,8 @@ const App = () => {
       <PlayerSprites ref={LanMei}></PlayerSprites>
       <Container ref={containerRef}>{monsters_Bug}</Container>
       <Circle x={750} y={320} size={60} handleClick={attack} />
-      <MaliciousScrips X={600} Y={150} ref={MaliciousScripsRef} />
+      {/* <MaliciousScrips X={600} Y={150} ref={MaliciousScripsRef} /> */}
+      {MaliciousScrip}
     </>
   );
 };

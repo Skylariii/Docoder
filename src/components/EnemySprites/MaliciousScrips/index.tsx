@@ -11,28 +11,34 @@ const MaliciousScrips = forwardRef(function MaliciousScrips(props: any, ref: any
   const bugRefs = useRef<any>(new Array()); //每个bug的实例
   const [blood, setBlood] = useState<number>(5); //血量
   const [attack, setAttack] = useState<number>(2); //攻击力
-  const url = 'https://pixijs.com/assets/eggHead.png'; //默认为小兔子
+  const url: string = 'https://pixijs.com/assets/eggHead.png'; //默认为小兔子
   const [x, setX] = useState<number>(X); //图片生成x的位置
   const [y, setY] = useState<number>(Y); //图片生成的y的位置
   const [up_down, setUp_Down] = useState<string>('down'); //图片上移还是下移
   const [rotation, setRotation] = useState<number>(0); //旋转
   const monsterRef = useRef<any>(null);
   const [myInterval, setMyInterval] = useState<any>();
+  const [myInterval2, setMyInterval2] = useState<any>();
 
   useImperativeHandle(ref, () => {
     return {
       changeBlood,
-      blood
+      attacktion,
+      blood,
+      x
     };
   });
 
   // 后续改变血量
-  const changeBlood = (bloodDecline: number) => {
+  const changeBlood: Function = (bloodDecline: number) => {
     setBlood(blood - bloodDecline);
   };
 
+  // 外部调用攻击
+  const attacktion: Function = () => attack;
+
   // 自移动，60帧
-  useTick((delta) => {
+  useTick((delta: number) => {
     if (delta) {
       setRotation(rotation + 0.1 * delta);
       if (blood > 0) {
@@ -59,7 +65,7 @@ const MaliciousScrips = forwardRef(function MaliciousScrips(props: any, ref: any
     }
   });
 
-  const updateMonsters = () => {
+  const updateMonsters: Function = () => {
     // 生成新的怪物，使用独立的计数器作为唯一的key
     const newMonster = (
       <BugScrips
@@ -92,6 +98,39 @@ const MaliciousScrips = forwardRef(function MaliciousScrips(props: any, ref: any
     // 在血量低时清除定时器
     if (blood <= 0) {
       clearInterval(myInterval);
+    }
+  }, [blood]);
+
+  const HitMonitor = () => {
+    if (containerRef.current && containerRef.current.children.length > 0) {
+      // 获取第一个怪物的x值
+      const x = containerRef.current.children[bugRef.current].x;
+
+      if (x < 200) {
+        bugRef.current++;
+        if (bugRefs.current[bugRef.current]) {
+          bugRefs.current[bugRef.current].changeBlood(1); //怪物扣一点血
+        }
+
+        // 如果被蓝妹躲过，移除第一个精灵
+        // setMonsters_Bug((prevMonsters) => prevMonsters.slice(1));
+      }
+    }
+  };
+  useEffect(() => {
+    if (!myInterval2) {
+      setMyInterval2(
+        setInterval(() => {
+          HitMonitor();
+        }, 100)
+      );
+    }
+
+    // 在血量低时清除定时器
+    if (blood <= 0) {
+      setTimeout(() => {
+        clearInterval(myInterval2);
+      }, 5000);
     }
   }, [blood]);
 
