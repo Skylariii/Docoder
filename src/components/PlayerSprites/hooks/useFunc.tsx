@@ -1,12 +1,15 @@
+import { Status } from '../constant';
+
 interface Props {
   ES: number;
   POW: number;
   setES: Function;
   setPOW: Function;
+  setStatus: Function;
 }
 
 export default function useJump(props: Props) {
-  const { ES, POW, setES, setPOW } = props;
+  const { ES, POW, setES, setPOW, setStatus } = props;
 
   //增加护盾
   function addES() {
@@ -23,7 +26,9 @@ export default function useJump(props: Props) {
   }
 
   //无敌冲刺
-  function invincibleSprint() {}
+  function invincibleSprint() {
+    setStatus(Status.SPRINTING);
+  }
 
   return {};
 }

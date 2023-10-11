@@ -6,7 +6,7 @@ export default function Circle(props) {
 
   const draw = useCallback((g) => {
     g.clear();
-    g.beginFill('red', 0.5);
+    g.beginFill('rgba(0,0,0,0.1)', 0.5);
     g.drawCircle(x, y, size);
     g.endFill();
   }, []);

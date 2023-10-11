@@ -8,14 +8,8 @@ import Circle from '../Circle';
 const App = () => {
   const [monsters_Bug, setMonsters_Bug] = useState<JSX.Element[]>([]);
   const containerRef = useRef<any>(null);
-  const childrens = [
-    useRef<any>(null),
-    useRef<any>(null),
-    useRef<any>(null),
-    useRef<any>(null),
-    useRef<any>(null),
-    useRef<any>(null)
-  ];
+  const bugRef = useRef(0);
+  const bugRefs = useRef<any>(new Array()); //每个bug的实例
   const monsterCountRef = useRef(0);
   const LanMei = useRef<any>(null);
   const MaliciousScrips = useRef<any>(null); //恶意代码
@@ -28,15 +22,17 @@ const App = () => {
         key={monsterCountRef.current}
         X={600}
         Y={270}
-        ref={childrens[monsterCountRef.current % 7]}
+        ref={(bugRef) => {
+          if (bugRef) bugRefs.current[monsterCountRef.current] = bugRef; //动态拿到对应bug的实例
+        }}
       ></EnemySprites>
     );
+    // bugRefs.current.push(bugRef);
     setMonsters_Bug((prevMonsters) => [...prevMonsters, newMonster]);
 
     // 增加计数器
     monsterCountRef.current++;
-
-    if (monsterCountRef.current > 10000) {
+    if (monsterCountRef.current > 1000) {
       monsterCountRef.current = 0;
     }
   };
@@ -52,16 +48,16 @@ const App = () => {
   }, []);
   const HitMonitor = () => {
     if (containerRef.current && containerRef.current.children.length > 0) {
-      const x = containerRef.current.children[0].x;
-      const y = containerRef.current.children[0].y;
-      if (x < 200) {
-        childrens[monsterCountRef.current % 6].current.changeBlood(1);
-        // 如果被蓝妹躲过，移除第一个精灵
+      // 获取第一个怪物的x值
+      const x = containerRef.current.children[bugRef.current].x;
 
-        if (y > 400) {
-          // setMonsters_Bug((prevMonsters) => prevMonsters.slice(1));
-          MaliciousScrips.current.changeBlood(1); //每移除一个精灵，恶意代码血量减一
-        }
+      if (x < 200) {
+        bugRef.current++;
+        bugRefs.current[bugRef.current].changeBlood(1); //怪物扣一点血
+        MaliciousScrips.current.changeBlood(1); //每移除一个精灵，恶意代码血量减一
+
+        // 如果被蓝妹躲过，移除第一个精灵
+        // setMonsters_Bug((prevMonsters) => prevMonsters.slice(1));
       }
     }
     // 执行碰撞检测并过滤掉碰撞的怪物
@@ -91,10 +87,10 @@ const App = () => {
   }
   return (
     <>
-      <Circle x={120} y={400} size={60} handleClick={jump} />
+      <Circle x={100} y={320} size={60} handleClick={jump} />
       <PlayerSprites ref={LanMei}></PlayerSprites>
       <Container ref={containerRef}>{monsters_Bug}</Container>
-      <Circle x={820} y={400} size={60} handleClick={attack} />
+      <Circle x={750} y={320} size={60} handleClick={attack} />
       <EnemySprites type="maliciousScrips" X={600} Y={270} ref={MaliciousScrips} />
     </>
   );
