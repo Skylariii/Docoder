@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { Texture } from 'pixi.js';
 import { AnimatedSprite } from '@pixi/react';
-import { Status, X, Y, WIDTH, HEIGHT } from './constant';
+import { Status } from './constant';
 //images
 import run000Img from '../../assets/run/Run_000.png';
 import run001Img from '../../assets/run/Run_001.png';
@@ -23,7 +23,7 @@ const PlayerSprites = forwardRef((_props, ref) => {
   const [ES, setES] = useState(1); //护盾值
   const [POW, setPOW] = useState(0); //能量条
   const [status, setStatus] = useState<Status>(Status.RUNNING); //当前状态
-  const [h, setH] = useState(Y); //高度
+  const [h, setH] = useState(300); //高度
   const [v, setV] = useState(5); //速度
   const [frames, setFrames] = useState([]); //动画分解图
   const alienImages = ['https://pixijs.io/pixi-react/img/bunny.png'];
@@ -32,16 +32,11 @@ const PlayerSprites = forwardRef((_props, ref) => {
 
   useImperativeHandle(ref, () => {
     return {
-      HP,
       jump,
-      attack,
-      ref
+      attack
     };
   });
 
-  useEffect(() => {
-    getRunningImgs();
-  }, []);
   //监听人物状态
   useEffect(() => {
     switch (status) {
@@ -52,13 +47,16 @@ const PlayerSprites = forwardRef((_props, ref) => {
         });
         break;
       case Status.ATACKING:
-        getAnimateImgs([run000Img, run005Img]);
+        getAnimateImgs([
+          'https://pixijs.io/pixi-react/img/bunny.png',
+          'https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/snake.png'
+        ]);
         setTimeout(() => {
           animationSprite.current.play();
         });
         setTimeout(() => {
           setStatus(Status.RUNNING);
-        }, 100);
+        }, 800);
         break;
       default:
         break;
@@ -70,6 +68,23 @@ const PlayerSprites = forwardRef((_props, ref) => {
     textureArray.push(texture);
   }
 
+  // useTick((delta: any) => {
+  //   console.log('delta', delta);
+  // });
+
+  useEffect(() => {
+    // const fetchAssets = async () => {
+    //   const texture = Texture.from(run000Img);
+    //   console.log('Assets', Assets);
+    //   const sheet = await Assets.load(spritesheet);
+    //   console.log('sheet', sheet);
+    // };
+    // fetchAssets();
+    getRunningImgs();
+    // app.loader.add(spritesheet).load((_, resource) => {
+    //   setFrames(Object.keys(resource[spritesheet].data.frames).map((frame) => PIXI.Texture.from(frame)));
+    // });
+  }, []);
 
   if (frames.length === 0) {
     return null;
@@ -94,6 +109,7 @@ const PlayerSprites = forwardRef((_props, ref) => {
       run008Img,
       run009Img
     ];
+    // setFrames(Object.keys(sheet.data.frames).map((frame) => Texture.from(frame)));
     getAnimateImgs(runImgs);
   }
 
@@ -114,9 +130,7 @@ const PlayerSprites = forwardRef((_props, ref) => {
       isPlaying={true}
       textures={frames}
       interactive={true}
-      width={WIDTH}
-      height={HEIGHT}
-      x={X}
+      x={400}
       y={h}
       anchor={{ x: 0.5 }}
     />

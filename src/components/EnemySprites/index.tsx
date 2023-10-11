@@ -1,16 +1,23 @@
-import { LegacyRef, useCallback, useEffect, useRef, useState } from 'react';
-import * as PIXI from 'pixi.js';
-import { AnimatedSprite, Container, Graphics, Sprite, Stage, Text, useTick } from '@pixi/react';
+import { useCallback, useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import { Sprite, useTick } from '@pixi/react';
 
-export default function EnemySprites(props: any) {
-  const { type } = props;
-  const [blood, setBlood] = useState(0); //血量
-  const [attack, setAttack] = useState(0); //攻击力
-  const [url, setUrl] = useState('https://pixijs.com/assets/bunny.png'); //默认为小兔子
-  const [x, setX] = useState(600); //图片生成x的位置
-  const [y, setY] = useState(type === 'bug' ? 270 : 150); //图片生成的y的位置
-  const [up_down, setUp_Down] = useState('down'); //图片上移还是下移
-  const [rotation, setRotation] = useState(0); //旋转
+const EnemySprites = forwardRef(function EnemySprites(props: any, ref: any) {
+  const { type, X, Y } = props;
+  const [blood, setBlood] = useState<number>(0); //血量
+  const [attack, setAttack] = useState<number>(0); //攻击力
+  const [url, setUrl] = useState<string>('https://pixijs.com/assets/bunny.png'); //默认为小兔子
+  const [x, setX] = useState<number>(X); //图片生成x的位置
+  const [y, setY] = useState<number>(type === 'bug' ? Y : 150); //图片生成的y的位置
+  const [up_down, setUp_Down] = useState<string>('down'); //图片上移还是下移
+  const [rotation, setRotation] = useState<number>(0); //旋转
+  const monsterRef = useRef<any>(null);
+
+  useImperativeHandle(ref, () => {
+    return {
+      changeBlood,
+      ref
+    };
+  });
 
   // 初始化血量以及攻击力
   useEffect(() => {
@@ -27,32 +34,43 @@ export default function EnemySprites(props: any) {
       }
     }
   }, []);
-  // 后续改变血量
-  useEffect(() => {}, [blood]);
 
+  // 后续改变血量
+  const changeBlood = (bloodDecline: number) => {
+    setBlood(blood - bloodDecline);
+  };
+
+  // 自移动，60帧
   useTick((delta) => {
     if (delta) {
       setRotation(rotation + 0.1 * delta);
-      if (type === 'bug' && x >= 15) {
-        setX(x - 1);
-      } else {
-        if (up_down === 'down' && y >= 140 && x > 250) {
-          //左移且上下移动
-          setY(y - 1);
+      if (blood > 0) {
+        if (type === 'bug' && x >= 15) {
           setX(x - 1);
-        } else if (up_down === 'down' && y >= 140) {
-          //仅上下移动
-          setY(y - 1);
-        } else if (up_down === 'down') {
-          setUp_Down('up');
+        } else {
+          if (up_down === 'down' && y >= 140 && x > 250) {
+            //左移且上下移动
+            setY(y - 1);
+          } else if (up_down === 'down' && y >= 140) {
+            //仅上下移动
+            setY(y - 1);
+          } else if (up_down === 'down') {
+            setUp_Down('up');
+          }
+          if (up_down === 'up' && y <= 160 && x > 250) {
+            setY(y + 1);
+          } else if (up_down === 'up' && y <= 160) {
+            setY(y + 1);
+          } else if (up_down === 'up') {
+            setUp_Down('down');
+          }
         }
-        if (up_down === 'up' && y <= 160 && x > 250) {
+      } else {
+        if (type === 'bug') {
           setY(y + 1);
-          setX(x - 1);
-        } else if (up_down === 'up' && y <= 160) {
-          setY(y + 1);
-        } else if (up_down === 'up') {
-          setUp_Down('down');
+        } else {
+          setY(y - 1);
+          setX(x + 1);
         }
       }
     }
@@ -61,10 +79,20 @@ export default function EnemySprites(props: any) {
   return (
     <>
       {type === 'bug' ? (
-        <Sprite interactive={true} image={url} x={x} y={y} anchor={{ x: 0.5, y: 0.5 }} rotation={rotation} />
+        <Sprite
+          interactive={true}
+          image={url}
+          x={x}
+          y={y}
+          anchor={{ x: 0.5, y: 0.5 }}
+          rotation={rotation}
+          ref={monsterRef}
+        />
       ) : (
-        <Sprite interactive={true} image={url} x={x} y={y} anchor={{ x: 0.5, y: 0.5 }} />
+        <Sprite interactive={true} image={url} x={x} y={y} anchor={{ x: 0.5, y: 0.5 }} ref={monsterRef} />
       )}
     </>
   );
-}
+});
+
+export default EnemySprites;

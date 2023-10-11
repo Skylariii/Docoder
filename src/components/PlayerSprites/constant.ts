@@ -20,3 +20,4 @@ export const Y = 80;
 //蓝妹宽高
 export const WIDTH = 90;
 export const HEIGHT = 150;
+
