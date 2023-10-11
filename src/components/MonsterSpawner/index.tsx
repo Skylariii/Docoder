@@ -20,34 +20,45 @@ const App = () => {
   const LanMei = useRef<any>(null);
   const MaliciousScrips = useRef<any>(null); //恶意代码
 
-  const updateMonsters = () => {
-    // 生成新的怪物，使用独立的计数器作为唯一的key
-    const newMonster = (
-      <EnemySprites
-        type={'bug'}
-        key={monsterCountRef.current}
-        X={600}
-        Y={270}
-        ref={childrens[monsterCountRef.current % 7]}
-      ></EnemySprites>
-    );
-    setMonsters_Bug((prevMonsters) => [...prevMonsters, newMonster]);
+  const updateBugs = async () => {
+    for (let i = 0; i < Math.random() * 6; i++) {
+      setTimeout(() => {
+        const newMonster = <EnemySprites type={'bug'} key={monsterCountRef.current}></EnemySprites>;
+        setMonsters((prevMonsters) => [...prevMonsters, newMonster]);
+        // 增加计数器
+        monsterCountRef.current++;
+        if (monsterCountRef.current > 10000) {
+          monsterCountRef.current = 0;
+        }
+      }, i * 500);
+    }
+  };
+  const updateBigs = () => {
+    // 随机选择生成小怪或大怪
+    const isBug = Math.random() < 0.95;
+    if (!isBug) {
+      // 生成新的怪物，使用独立的计数器作为唯一的 key
+      const newMonster = <EnemySprites type={'maliciousScrips'} key={monsterCountRef.current}></EnemySprites>;
 
-    // 增加计数器
-    monsterCountRef.current++;
+      setMonsters((prevMonsters) => [...prevMonsters, newMonster]);
 
-    if (monsterCountRef.current > 10000) {
-      monsterCountRef.current = 0;
+      // 增加计数器
+      monsterCountRef.current++;
+      if (monsterCountRef.current > 10000) {
+        monsterCountRef.current = 0;
+      }
     }
   };
 
   useEffect(() => {
     // 创建一个定时器来定期刷新怪物
-    const spawnMonsterInterval = setInterval(updateMonsters, 1000);
+    const spawnBugMonsterInterval = setInterval(updateBugs, 6000);
+    const spawnBigMonsterInterval = setInterval(updateBigs, 5000);
 
     return () => {
       // 在组件卸载时清除定时器
-      clearInterval(spawnMonsterInterval);
+      clearInterval(spawnBugMonsterInterval);
+      clearInterval(spawnBigMonsterInterval);
     };
   }, []);
   const HitMonitor = () => {
@@ -91,11 +102,10 @@ const App = () => {
   }
   return (
     <>
-      <Circle x={120} y={400} size={60} handleClick={jump} />
+      <Circle x={70} y={310} size={60} handleClick={jump} />
       <PlayerSprites ref={LanMei}></PlayerSprites>
-      <Container ref={containerRef}>{monsters_Bug}</Container>
-      <Circle x={820} y={400} size={60} handleClick={attack} />
-      <EnemySprites type="maliciousScrips" X={600} Y={270} ref={MaliciousScrips} />
+      <Container ref={containerRef}>{monsters}</Container>
+      <Circle x={780} y={310} size={60} handleClick={attack} />
     </>
   );
 };

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { HEIGHT } from '../constant';
 
 interface Props {
   h: number;
@@ -15,7 +16,7 @@ export default function useJump(props: Props) {
 
   useEffect(() => {
     animationFrame = requestAnimationFrame(animate);
-    if (h >= 300) {
+    if (h >= HEIGHT) {
       cancelAnimationFrame(animationFrame);
     }
   }, [h, v]);
@@ -30,7 +31,7 @@ export default function useJump(props: Props) {
   };
 
   const jump = () => {
-    if (h < 300) return false; //未掉落之前不允许点击跳跃
+    if (h < HEIGHT) return false; //未掉落之前不允许点击跳跃
     setV(15);
     animate();
   };
