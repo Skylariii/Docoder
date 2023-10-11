@@ -67,10 +67,10 @@ const App = () => {
   }
   return (
     <>
-      <Circle x={120} y={400} size={60} handleClick={jump} />
+      <Circle x={70} y={310} size={60} handleClick={jump} />
       <PlayerSprites ref={LanMei}></PlayerSprites>
       <Container ref={containerRef}>{monsters}</Container>
-      <Circle x={820} y={400} size={60} handleClick={attack} />
+      <Circle x={780} y={310} size={60} handleClick={attack} />
     </>
   );
 };
