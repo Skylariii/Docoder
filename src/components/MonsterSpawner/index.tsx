@@ -24,7 +24,7 @@ const App = () => {
     for (let i = 0; i < Math.random() * 6; i++) {
       setTimeout(() => {
         const newMonster = <EnemySprites type={'bug'} key={monsterCountRef.current}></EnemySprites>;
-        setMonsters((prevMonsters) => [...prevMonsters, newMonster]);
+        setMonsters_Bug((prevMonsters) => [...prevMonsters, newMonster]);
         // 增加计数器
         monsterCountRef.current++;
         if (monsterCountRef.current > 10000) {
@@ -40,7 +40,7 @@ const App = () => {
       // 生成新的怪物，使用独立的计数器作为唯一的 key
       const newMonster = <EnemySprites type={'maliciousScrips'} key={monsterCountRef.current}></EnemySprites>;
 
-      setMonsters((prevMonsters) => [...prevMonsters, newMonster]);
+      setMonsters_Bug((prevMonsters) => [...prevMonsters, newMonster]);
 
       // 增加计数器
       monsterCountRef.current++;
@@ -104,7 +104,7 @@ const App = () => {
     <>
       <Circle x={70} y={310} size={60} handleClick={jump} />
       <PlayerSprites ref={LanMei}></PlayerSprites>
-      <Container ref={containerRef}>{monsters}</Container>
+      <Container ref={containerRef}>{monsters_Bug}</Container>
       <Circle x={780} y={310} size={60} handleClick={attack} />
     </>
   );
