@@ -81,7 +81,7 @@ const App = () => {
         setMonsters_Bug(() => newMonster);
       }
     }
-    // console.log(MaliciousScrip, MaliciousScripsRef.current.blood, MaliciousScripsRef.current.x);
+    console.log(MaliciousScrip, MaliciousScripsRef.current.blood, MaliciousScripsRef.current.x);
     // 检测MaliciousScrips是否死亡
     if (
       MaliciousScrip != undefined &&
