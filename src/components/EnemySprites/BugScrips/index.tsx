@@ -25,7 +25,10 @@ const BugScrips = forwardRef(function BugScrips(props: any, ref: any) {
   };
 
   // 外部调用攻击
-  const attacktion: Function = () => attack;
+  const attacktion: Function = () => {
+    console.log('你扣了' + attack + '点血');
+    return attack;
+  };
 
   // 自移动，60帧
   useTick((delta: number) => {

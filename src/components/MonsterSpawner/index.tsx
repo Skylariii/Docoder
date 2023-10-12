@@ -60,9 +60,13 @@ const App = () => {
 
       if (x < 200) {
         bugRef.current++;
-        bugRefs.current[bugRef.current].changeBlood(1); //怪物扣一点血
+        if (bugRefs.current[bugRef.current]) {
+          bugRefs.current[bugRef.current].attacktion(); //怪物攻击
 
-        MaliciousScripsRef.current.changeBlood(1); //每移除一个精灵，恶意代码血量减一
+          bugRefs.current[bugRef.current].changeBlood(1); //怪物扣一点血
+        }
+
+        if (MaliciousScrip && MaliciousScrip != <></>) MaliciousScripsRef.current.changeBlood(1); //每移除一个精灵，恶意代码血量减一
 
         // 如果被蓝妹躲过，移除第一个精灵
         // setMonsters_Bug((prevMonsters) => prevMonsters.slice(1));
@@ -77,7 +81,7 @@ const App = () => {
         setMonsters_Bug(() => newMonster);
       }
     }
-    console.log(MaliciousScrip, MaliciousScripsRef.current.blood, MaliciousScripsRef.current.x);
+    // console.log(MaliciousScrip, MaliciousScripsRef.current.blood, MaliciousScripsRef.current.x);
     // 检测MaliciousScrips是否死亡
     if (
       MaliciousScrip != undefined &&
