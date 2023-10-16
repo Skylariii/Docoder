@@ -15,7 +15,10 @@ const BugScrips = forwardRef(function BugScrips(props: any, ref: any) {
   useImperativeHandle(ref, () => {
     return {
       changeBlood,
-      attacktion
+      attacktion,
+      X,
+      Y,
+      ref: monsterRef
     };
   });
 
