@@ -16,8 +16,6 @@ const BugScrips = forwardRef(function BugScrips(props: any, ref: any) {
     return {
       changeBlood,
       attacktion,
-      X,
-      Y,
       ref: monsterRef
     };
   });

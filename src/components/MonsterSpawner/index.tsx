@@ -1,28 +1,22 @@
-import { useRef } from 'react';
 import PlayerSprites from '../PlayerSprites';
 import Circle from '../Circle';
-import useMonsters from './hooks/useMonsters.tsx';
+import useMonsters from './hooks/useMonstersBug.tsx';
+import useLanMei from './hooks/useLanMei.tsx';
+import useTicks from './hooks/useTicks.tsx';
+import useMaliciousScrips from './hooks/useMaliciousScrips.tsx';
 const App = () => {
-  const LanMei = useRef<any>(null);
-  // const MaliciousScripsRef = useRef<any>(null); //恶意代码Ref
-  // const [MaliciousScrip, setMaliciousScrip] = useState<JSX.Element>(); //恶意代码
-  const { monsters_Bug } = useMonsters(LanMei);
-  function jump() {
-    if (LanMei.current) LanMei.current.jump();
-  }
-  function attack() {
-    if (LanMei.current) LanMei.current.attack();
-  }
+  const { LanMei, jump, attack } = useLanMei();
+  const Ticks = useTicks();
+  const { monsters_Bug } = useMonsters(LanMei, Ticks);
+  const { MaliciousScrip } = useMaliciousScrips(Ticks);
+
   return (
     <>
       <Circle x={window.innerWidth * 0.1} y={window.innerHeight * 0.8} size={60} handleClick={jump} />
       <PlayerSprites ref={LanMei}></PlayerSprites>
-      {monsters_Bug.map((item) => {
-        return item.monster;
-      })}
+      {monsters_Bug.map(({ monster }) => monster)}
       <Circle x={window.innerWidth * 0.9} y={window.innerHeight * 0.8} size={60} handleClick={attack} />
-      {/* <MaliciousScrips X={600} Y={150} ref={MaliciousScripsRef} /> */}
-      {/*{MaliciousScrip}*/}
+      {MaliciousScrip}
     </>
   );
 };
