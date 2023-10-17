@@ -1,23 +1,12 @@
 import { useRef } from 'react';
-import { hitTestRectangle } from '../../utils';
 import PlayerSprites from '../PlayerSprites';
 import Circle from '../Circle';
 import useMonsters from './hooks/useMonsters.tsx';
-import { useTick } from '@pixi/react';
 const App = () => {
   const LanMei = useRef<any>(null);
   // const MaliciousScripsRef = useRef<any>(null); //恶意代码Ref
   // const [MaliciousScrip, setMaliciousScrip] = useState<JSX.Element>(); //恶意代码
-  const { monsters_Bug, setMonsters_Bug } = useMonsters();
-  const Timecount = useRef(0);
-
-  useTick((delta) => {
-    Timecount.current += delta;
-    if (Timecount.current > 10) {
-      HitMonitor();
-      Timecount.current = 0;
-    }
-  });
+  const { monsters_Bug } = useMonsters(LanMei);
   function jump() {
     if (LanMei.current) LanMei.current.jump();
   }
