@@ -35,7 +35,7 @@ const PlayerSprites = forwardRef((_props, ref) => {
       HP,
       jump,
       attack,
-      ref
+      ref: animationSprite
     };
   });
 

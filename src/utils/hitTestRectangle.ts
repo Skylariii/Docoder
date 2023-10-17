@@ -2,7 +2,6 @@ export default function hitTestRectangle(r1: any, r2: any) {
   //Define the variables we'll need to calculate
   let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
   //hit will determine whether there's a collision
-
   //Find the center points of each sprite
   r1.centerX = r1.x + r1.width / 2;
   r1.centerY = r1.y + r1.height / 2;
