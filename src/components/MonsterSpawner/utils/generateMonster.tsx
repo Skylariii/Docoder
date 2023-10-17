@@ -4,15 +4,27 @@ export interface Monster {
   monster?: JSX.Element;
   monsterRef?: JSX.Element | undefined;
 }
-export default function generateMonster(key: number) {
+
+export interface Props {
+  key: number;
+  position: {
+    X: number;
+    Y: number;
+  };
+}
+export default function generateMonster(props: Props) {
+  const {
+    key,
+    position: { X, Y }
+  } = props;
   const newMonster: Monster = {
     monsterRef: undefined
   };
   newMonster.monster = (
     <BugScrips
       key={key}
-      X={window.innerWidth + 20}
-      Y={200}
+      X={X}
+      Y={Y}
       ref={(ref: JSX.Element) => {
         newMonster.monsterRef = ref;
       }}

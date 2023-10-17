@@ -1,21 +1,26 @@
 import { useTick } from '@pixi/react';
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 export interface Tick {
   timeRef: React.MutableRefObject<number>;
   timeOut: number;
   callBack: Function;
   parameter?: any[];
 }
+export interface Ticks {
+  [key: string]: Tick;
+}
 export default function useTicks() {
-  const Ticks = useRef<Tick[]>([]);
+  const [Ticks, setTicks] = useState<Ticks>({});
   useTick((delta) => {
-    Ticks.current.forEach((item) => {
-      item.timeRef.current += delta;
-      if (item.timeOut < item.timeRef.current) {
-        item.parameter ? item.callBack(...item.parameter) : item.callBack();
-        item.timeRef.current = 0;
+    console.log(Ticks);
+    Object.keys(Ticks).forEach((item) => {
+      const { timeOut, timeRef, parameter, callBack } = Ticks[item];
+      timeRef.current += delta;
+      if (timeOut < timeRef.current) {
+        parameter ? callBack(...parameter) : callBack();
+        timeRef.current = 0;
       }
     });
   });
-  return Ticks;
+  return { Ticks, setTicks };
 }

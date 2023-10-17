@@ -4,11 +4,15 @@ import useMonsters from './hooks/useMonstersBug.tsx';
 import useLanMei from './hooks/useLanMei.tsx';
 import useTicks from './hooks/useTicks.tsx';
 import useMaliciousScrips from './hooks/useMaliciousScrips.tsx';
+import { useEffect } from 'react';
 const App = () => {
   const { LanMei, jump, attack } = useLanMei();
-  const Ticks = useTicks();
-  const { monsters_Bug } = useMonsters(LanMei, Ticks);
-  const { MaliciousScrip } = useMaliciousScrips(Ticks);
+  const { Ticks, setTicks } = useTicks();
+  const { monsters_Bug, setStart } = useMonsters(LanMei, Ticks, setTicks);
+  const { MaliciousScrip } = useMaliciousScrips(LanMei, Ticks, setTicks);
+  useEffect(() => {
+    setStart(true);
+  }, []);
 
   return (
     <>
