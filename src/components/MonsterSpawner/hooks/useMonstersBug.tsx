@@ -3,13 +3,16 @@ import generateMonster, { Monster, Props } from '../utils/generateMonster';
 import hitTestRectangle from '../../../utils/hitTestRectangle';
 import useStore from '../../../contexts';
 import useTicks from './useTicks.tsx';
-export default function useMonstersBug(LanMei: React.MutableRefObject<any>) {
-  const [start, setStart] = useState(false);
+export default function useMonstersBug(
+  LanMei: React.MutableRefObject<any>,
+  monsterCountRef: React.MutableRefObject<number>,
+  changeBloodCallBack?: () => void
+) {
+  const start = useRef(false);
   const [monsters_Bug, setMonsters_Bug] = useState<Monster[]>([]); //普通bug,及其ref 数组
-  const monsterCountRef = useRef(0); // 提供唯一的key
   const generateElapsed = useRef<number>(0); //生成bugs 计数器
   const disappearElapsed = useRef<number>(0); // 删除bugs 计数器（检测是否超出屏幕）
-  const [positionConfig, setPositionConfig] = useState<Props['position']>({
+  const positionConfig = useRef<Props['position']>({
     X: window.innerWidth + 20,
     Y: window.innerHeight * 0.5
   });
@@ -19,7 +22,7 @@ export default function useMonstersBug(LanMei: React.MutableRefObject<any>) {
     monsterCountRef.current++;
     const props: Props = {
       key: monsterCountRef.current,
-      position: positionConfig
+      position: positionConfig.current
     };
     const newMonster = generateMonster(props);
     setMonsters_Bug((prevState) => [...prevState, newMonster]);
@@ -36,6 +39,7 @@ export default function useMonstersBug(LanMei: React.MutableRefObject<any>) {
       if (X < -20 || Y < -20 || Y > window.innerHeight + 20) {
         if (Y < -20 || Y > window.innerHeight + 20) {
           setScore(1);
+          if (changeBloodCallBack) changeBloodCallBack();
         }
         return false;
       } // 对于超出屏幕的精灵删除
@@ -67,13 +71,15 @@ export default function useMonstersBug(LanMei: React.MutableRefObject<any>) {
   useTicks({
     timeOut: 90,
     callBack: generate,
-    timeRef: generateElapsed
+    timeRef: generateElapsed,
+    start
   });
   useTicks({
     timeOut: 10,
     callBack: disappear,
     timeRef: disappearElapsed,
-    parameter: [LanMei]
+    parameter: [LanMei],
+    start
   });
-  return { monsters_Bug, setMonsters_Bug, monsterCountRef, setStart, setPositionConfig };
+  return { monsters_Bug, setMonsters_Bug, monsterCountRef, start, positionConfig };
 }
