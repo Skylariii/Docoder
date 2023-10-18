@@ -1,13 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import generateMonster, { Monster, Props } from '../utils/generateMonster';
 import hitTestRectangle from '../../../utils/hitTestRectangle';
 import useStore from '../../../contexts';
-import { Ticks } from './useTicks.tsx';
-export default function useMonstersBug(
-  LanMei: React.MutableRefObject<any>,
-  Ticks: Ticks,
-  setTicks: (Ticks: Ticks) => void
-) {
+import useTicks from './useTicks.tsx';
+export default function useMonstersBug(LanMei: React.MutableRefObject<any>) {
   const [start, setStart] = useState(false);
   const [monsters_Bug, setMonsters_Bug] = useState<Monster[]>([]); //普通bug,及其ref 数组
   const monsterCountRef = useRef(0); // 提供唯一的key
@@ -26,7 +22,7 @@ export default function useMonstersBug(
       position: positionConfig
     };
     const newMonster = generateMonster(props);
-    setMonsters_Bug((prevMonsters) => [...prevMonsters, newMonster]);
+    setMonsters_Bug((prevState) => [...prevState, newMonster]);
     if (monsterCountRef.current > 10000) {
       monsterCountRef.current = 0;
     }
@@ -34,7 +30,7 @@ export default function useMonstersBug(
   const disappear = function (LanMei: React.MutableRefObject<any>) {
     if (!LanMei.current) return;
     const newMonsters = monsters_Bug.filter(({ monsterRef }: any) => {
-      if (monsterRef === null) return true;
+      if (!monsterRef) return true;
       const X = monsterRef.ref.current.x; // 获得当前的坐标
       const Y = monsterRef.ref.current.y;
       if (X < -20 || Y < -20 || Y > window.innerHeight + 20) {
@@ -68,29 +64,16 @@ export default function useMonstersBug(
     //       setMaliciousScrip(<></>);
     //     }
   };
-  useEffect(() => {
-    if (!setTicks) return;
-    if (start) {
-      Ticks['generateBug'] = {
-        timeOut: 90,
-        callBack: generate,
-        timeRef: generateElapsed
-      };
-      Ticks['disappearBugs'] = {
-        timeOut: 10,
-        callBack: disappear,
-        timeRef: disappearElapsed,
-        parameter: [LanMei]
-      };
-      setTicks({ ...Ticks });
-    } else {
-      delete Ticks['generateBug'];
-      if (monsters_Bug.length === 0) {
-        delete Ticks['disappearBugs'];
-      }
-      setTicks({ ...Ticks });
-    }
-  }, [monsters_Bug, start, setTicks]);
-
+  useTicks({
+    timeOut: 90,
+    callBack: generate,
+    timeRef: generateElapsed
+  });
+  useTicks({
+    timeOut: 10,
+    callBack: disappear,
+    timeRef: disappearElapsed,
+    parameter: [LanMei]
+  });
   return { monsters_Bug, setMonsters_Bug, monsterCountRef, setStart, setPositionConfig };
 }

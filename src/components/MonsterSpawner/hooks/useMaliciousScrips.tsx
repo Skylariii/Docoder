@@ -6,14 +6,14 @@ import useMonstersBug from './useMonstersBug.tsx';
 
 export default function useMaliciousScrips(
   LanMei: React.MutableRefObject<any>,
-  Ticks: Ticks,
-  setTicks: (Ticks: Ticks) => void
+  generateTick: React.MutableRefObject<Ticks>,
+  deleteTick: React.MutableRefObject<Ticks>
 ) {
   const MaliciousScripsRef = useRef<any>(null); //恶意代码Ref
   const [MaliciousScrip, setMaliciousScrip] = useState<JSX.Element | undefined>(undefined); //恶意代码
   const generateTimeRef = useRef(0);
   const { score } = useStore();
-  const { monsters_Bug, setStart, setPositionConfig } = useMonstersBug(LanMei, Ticks);
+  const { monsters_Bug, setStart, setPositionConfig } = useMonstersBug(LanMei, generateTick, deleteTick);
   const generate = function () {
     if (MaliciousScripsRef) {
       setStart(true);
@@ -26,16 +26,14 @@ export default function useMaliciousScrips(
     }
   };
   useEffect(() => {
-    Ticks['generateMalicious'] = {
+    generateTick.current['generateMalicious'] = {
       timeRef: generateTimeRef,
       timeOut: 300,
       callBack: generate
     };
-    setTicks({ ...Ticks });
     if (!MaliciousScrip) {
-      delete Ticks['generateMalicious'];
-      setTicks({ ...Ticks });
+      delete generateTick.current['generateMalicious'];
     }
-  }, [MaliciousScrip, setTicks]);
+  }, [MaliciousScrip]);
   return { MaliciousScripsRef, MaliciousScrip, setMaliciousScrip };
 }
